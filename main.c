@@ -71,9 +71,14 @@ void WS2812_SetColor(uint8_t ledIndex, uint8_t red, uint8_t green, uint8_t blue)
     }
 }
 
-void clearLED(){
+void WS2812_Clear(){
 	for (int i = 0; i < LED_BUFFER_SIZE; i++) {
 		ledBuffer[i] = 0xC0;
+	}
+}
+void WS2812_White(){
+	for (int i = 0; i < LED_BUFFER_SIZE; i++) {
+		ledBuffer[i] = 0xF8;
 	}
 }
 
@@ -99,7 +104,6 @@ int main(void)
 
   /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
   HAL_Init();
-
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
@@ -126,24 +130,16 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-	  clearLED();
+	  WS2812_White();
 	  HAL_SPI_Transmit(&hspi1, ledBuffer, sizeof(ledBuffer), HAL_MAX_DELAY);
-	  HAL_Delay(50);
-	  for(int j=0;j<NUM_LEDS;j++){
-		  for(int i=0;i<254;i++){
-			  WS2812_SetColor(j, i, 0, i);
-			  HAL_SPI_Transmit(&hspi1, ledBuffer, sizeof(ledBuffer), HAL_MAX_DELAY);
-			  HAL_Delay(2);
-		  }
-	  }
-//	  WS2812_SetColor(0, 0, 200, 200);
-//	  WS2812_SetColor(1, 200, 0, 200);
-//	  WS2812_SetColor(2, 200, 200, 0);
-//	  HAL_SPI_Transmit(&hspi1, ledBuffer, sizeof(ledBuffer), HAL_MAX_DELAY);
+	  HAL_Delay(1000);
+	  WS2812_SetColor(0, 0, 200, 200);
+	  WS2812_SetColor(1, 200, 0, 200);
+	  WS2812_SetColor(2, 200, 200, 0);
+	  HAL_SPI_Transmit(&hspi1, ledBuffer, sizeof(ledBuffer), HAL_MAX_DELAY);
 
-	  HAL_Delay(2000);
-	  clearLED();
-	  HAL_SPI_Transmit(&hspi1, ledBuffer, sizeof(ledBuffer), HAL_MAX_DELAY);
+	  HAL_Delay(1000);
+
 
   }
   /* USER CODE END 3 */
